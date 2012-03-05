@@ -2,6 +2,8 @@
 
 namespace Botlife\Command\Bar;
 
+use \Botlife\Entity\Bar\Item\BronzeBar;
+
 class Bar extends \Botlife\Command\ACommand
 {
 
@@ -27,7 +29,7 @@ class Bar extends \Botlife\Command\ACommand
         
         if (!isset($bar->users[strtolower($event->auth)])) {
             \Ircbot\msg('#BotLife.Team', 'New bar user named: ' . $event->auth);
-            $user = new \StorageObject;
+            $user = new \Botlife\Entity\Bar\User;
             $user->bars       = 0;
             $user->lastPlayed = 0;
             $user->waitTime   = 0;
@@ -43,12 +45,13 @@ class Bar extends \Botlife\Command\ACommand
             return;
         }
         $bars = round(mt_rand(1, 5) * 100 * 0.63, 0);
-        $user->bars = $user->bars + $bars;
+        $user->inventory->incItemAmount(new BronzeBar, $bars);
         $user->lastPlayed = time();
         $user->waitTime   = round(mt_rand(5, 15) * 60 * 0.91, 0);
         $this->respondWithPrefix(
             $this->getMessage($event->mask->nickname, $bars) . ' '
-                . 'You now have ' . $user->bars . ' bars.'
+                . 'You now have '
+                . $user->inventory->getItemAmount(new BronzeBar) . ' bars.'
         );
         $bar->users->$userId = $user;
         var_dump($bar);
