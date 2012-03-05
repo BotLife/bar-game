@@ -2,8 +2,6 @@
 
 namespace Botlife\Command\Bar;
 
-use \Botlife\Entity\Bar\Item\BronzeBar;
-
 class Inv extends \Botlife\Command\ACommand
 {
 

@@ -54,10 +54,7 @@ class Bar extends \Botlife\Command\ACommand
                 . $user->inventory->getItemAmount(new BronzeBar) . ' bars.'
         );
         $bar->users->$userId = $user;
-        var_dump($bar);
         \Botlife\Application\Storage::saveData('bar', $bar);
-        
-        //var_dump(new \StorageObject);
     }
     
     public function getMessage($user, $bars)
