@@ -23,9 +23,8 @@ class Bar extends \Botlife\Command\ACommand
             return;
         }
         $bar = \Botlife\Application\Storage::loadData('bar');
-        if (!isset($bar->users)) {
-            $bar->users = array();
-        }
+        $userId = strtolower($event->auth);
+        
         if (!isset($bar->users[strtolower($event->auth)])) {
             \Ircbot\msg('#BotLife.Team', 'New bar user named: ' . $event->auth);
             $user = new \StorageObject;
@@ -33,7 +32,7 @@ class Bar extends \Botlife\Command\ACommand
             $user->lastPlayed = 0;
             $user->waitTime   = 0;
         } else {
-            $user = $bar->users[strtolower($event->auth)];
+            $user = $bar->users->{$userId};
         }
         if (($user->lastPlayed + $user->waitTime) > time()) {
             $waitTime = ($user->lastPlayed + $user->waitTime) - time();
@@ -51,8 +50,11 @@ class Bar extends \Botlife\Command\ACommand
             $this->getMessage($event->mask->nickname, $bars) . ' '
                 . 'You now have ' . $user->bars . ' bars.'
         );
-        $bar->users[strtolower($event->auth)] = $user;
+        $bar->users->$userId = $user;
+        var_dump($bar);
         \Botlife\Application\Storage::saveData('bar', $bar);
+        
+        //var_dump(new \StorageObject);
     }
     
     public function getMessage($user, $bars)
