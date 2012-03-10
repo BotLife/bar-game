@@ -2,3 +2,6 @@
 /storage.dat
 /bar-messages.ini
 /BotLife/
+
+# Ignore backup files
+*~
