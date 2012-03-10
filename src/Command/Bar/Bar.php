@@ -15,27 +15,28 @@ class Bar extends \Botlife\Command\ACommand
     
     public $needsAuth = true;
     
+    const STATE_GET   = 1;
+    const STATE_LOSE  = 2;
+    
     public function run($event)
     {
         $this->detectResponseType($event->message);
+        $bar = \Botlife\Application\Storage::loadData('bar');
         if (!$event->auth) {
             $this->respondWithPrefix(
                 'In order to use bar you need to be logged in to NickServ'
             );
             return;
         }
-        $bar = \Botlife\Application\Storage::loadData('bar');
-        $userId = strtolower($event->auth);
-        
         if (!isset($bar->users[strtolower($event->auth)])) {
-            \Ircbot\msg('#BotLife.Team', 'New bar user named: ' . $event->auth);
-            $user = new \Botlife\Entity\Bar\User;
-            $user->bars       = 0;
-            $user->lastPlayed = 0;
-            $user->waitTime   = 0;
-        } else {
-            $user = $bar->users->{$userId};
+            $this->respondWithPrefix(
+                'So you wan\'t to play The Bar Game? Starting is very simple! '
+                    . 'Simply use !playbar'
+            );
+            return;
         }
+        $userId = strtolower($event->auth);
+	    $user = $bar->users->{$userId};
         if (($user->lastPlayed + $user->waitTime) > time()) {
             $waitTime = ($user->lastPlayed + $user->waitTime) - time();
             $this->respondWithPrefix(
@@ -44,10 +45,7 @@ class Bar extends \Botlife\Command\ACommand
             );
             return;
         }
-        $bars = round(mt_rand(1, 5) * 100 * 0.63, 0);
-        $user->inventory->incItemAmount(new BronzeBar, $bars);
-        $user->lastPlayed = time();
-        $user->waitTime   = round(mt_rand(5, 15) * 60 * 0.91, 0);
+        $this->playBar($user, $bars);
         $this->respondWithPrefix(
             $this->getMessage($event->mask->nickname, $bars) . ' '
                 . 'You now have '
@@ -55,6 +53,45 @@ class Bar extends \Botlife\Command\ACommand
         );
         $bar->users->$userId = $user;
         \Botlife\Application\Storage::saveData('bar', $bar);
+    }
+    
+    public function playBar(&$user, &$bars)
+    {
+        var_dump($this->determineState($user));
+        $bars = round(mt_rand(1, 5) * 100 * 0.63, 0);
+        $user->inventory->incItemAmount(new BronzeBar, $bars);
+        $user->lastPlayed = time();
+        $user->waitTime   = round(mt_rand(5, 15) * 60 * 0.91, 0);
+    }
+    
+    // Determines if a player shoud win or lose bars
+    public function determineState($user)
+    {
+        $items  = array();
+        $items[self::STATE_LOSE] = 10;
+        $items[self::STATE_GET] = true;
+        $chance = array();
+        $left   = 100;
+        $amount = 0;
+        foreach ($items as $state => $percentage) {
+            if (is_numeric($percentage)) {
+                $left -= $percentage;
+            } elseif (is_bool($percentage)) {
+                ++$amount;
+            }
+        }
+        $each   = floor($left / $amount);
+        foreach ($items as $state => $percentage) {
+            if (is_bool($percentage)) {
+                $items[$state] = $each;
+            }
+        }
+        foreach ($items as $state => $percentage) {
+            for ($i = 0; $i < $percentage; ++$i) {
+                $chance[] = $state;
+            }
+        }
+        return $chance[mt_rand(0, 99)];
     }
     
     public function getMessage($user, $bars)
