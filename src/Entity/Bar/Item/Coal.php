@@ -5,7 +5,8 @@ namespace Botlife\Entity\Bar\Item;
 class Coal extends Ore
 {
 
-    public $id   = 113;
-    public $name = 'Coal';
+    public $id      = 113;
+    public $name    = 'Coal';
+    public $quality = 1;
 
 }

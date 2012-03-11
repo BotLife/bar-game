@@ -24,6 +24,11 @@ class Inventory
         return false;
     }
 
+    public function hasItemAmount(AItem $item, $amount)
+    {
+        return ($amount <= $this->getItemAmount($item, $amount));
+    }
+
     public function getItemAmount(AItem $item)
     {
         return isset($this->items[get_class($item)])
@@ -38,6 +43,14 @@ class Inventory
     public function incItemAmount(AItem $item, $amount = 1)
     {
         $this->setItemAmount($item, $this->getItemAmount($item) + $amount);
+    }
+    public function decItemAmount(AItem $item, $amount = 1)
+    {
+        if (($this->getItemAmount($item) - $amount) == 0) {
+            unset($this->items[get_class($item)]);
+        } else {
+            $this->setItemAmount($item, $this->getItemAmount($item) - $amount);
+        }
     }
     
     public function getBestOfKind(AItem $item)

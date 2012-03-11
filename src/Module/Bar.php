@@ -10,6 +10,8 @@ class Bar extends AModule
         '\Botlife\Command\Bar\PlayBar',
         '\Botlife\Command\Bar\Inv',
         '\Botlife\Command\Bar\Mine',
+        '\Botlife\Command\Bar\Smith',
+        '\Botlife\Command\Bar\Admin\Give',
     );
 
 }

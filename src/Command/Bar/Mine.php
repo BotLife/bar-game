@@ -56,7 +56,7 @@ class Mine extends \Botlife\Command\ACommand
     {
         $c   = new \Botlife\Application\Colors;
         $pickaxe = $user->inventory->getBestOfKind(new Pickaxe);
-        $ore = new \Botlife\Entity\Bar\Item\Copper;
+        $ore = $this->randomOre($user);
         $ores = round(mt_rand(1, 5) * 10 * 0.37, 0);
         $ores *= $pickaxe->quality; 
         $ores /= $ore->quality;
@@ -71,6 +71,38 @@ class Mine extends \Botlife\Command\ACommand
         ));
         $user->lastPlayed = time();
         $user->waitTime   = round(mt_rand(5, 15) * 60 * 0.91, 0);
+    }
+    
+    public function randomOre($user)
+    {
+        $items  = array();
+        $items['Tin']     = 35;
+        $items['Copper']  = 35;
+        $items['Coal']    = 25;
+        $items['RuneOre'] = true;
+        $chance = array();
+        $left   = 100;
+        $amount = 0;
+        foreach ($items as $state => $percentage) {
+            if (is_numeric($percentage)) {
+                $left -= $percentage;
+            } elseif (is_bool($percentage)) {
+                ++$amount;
+            }
+        }
+        $each   = floor($left / $amount);
+        foreach ($items as $state => $percentage) {
+            if (is_bool($percentage)) {
+                $items[$state] = $each;
+            }
+        }
+        foreach ($items as $state => $percentage) {
+            for ($i = 0; $i < $percentage; ++$i) {
+                $chance[] = $state;
+            }
+        }
+        $ore = '\Botlife\Entity\Bar\Item\\' . $chance[mt_rand(0, 99)];
+        return new $ore;
     }
 
 }

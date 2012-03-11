@@ -15,9 +15,6 @@ class PlayBar extends \Botlife\Command\ACommand
     
     public $needsAuth = true;
     
-    const STATE_GET   = 1;
-    const STATE_LOSE  = 2;
-    
     public function run($event)
     {
         $this->detectResponseType($event->message);
