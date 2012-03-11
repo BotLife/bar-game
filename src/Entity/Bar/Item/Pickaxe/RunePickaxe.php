@@ -1,8 +1,8 @@
 <?php
 
-namespace Botlife\Entity\Bar\Item;
+namespace Botlife\Entity\Bar\Item\Pickaxe;
 
-class RunePickaxe extends Pickaxe
+class RunePickaxe extends Botlife\Entity\Bar\Item\Pickaxe
 {
 
     public $id      = 121;

@@ -2,8 +2,8 @@
 
 namespace Botlife\Command\Bar;
 
-use \Botlife\Entity\Bar\Item\BronzeBar;
-use \Botlife\Entity\Bar\Item\RuneBar;
+use \Botlife\Entity\Bar\Item\Bar\BronzeBar;
+use \Botlife\Entity\Bar\Item\Bar\RuneBar;
 
 class Smith extends \Botlife\Command\ACommand
 {
@@ -71,7 +71,7 @@ class Smith extends \Botlife\Command\ACommand
         $barsMade = 0;
         while ($metDeps) {
             foreach ($bar->smithDeps as $item => $amount) {
-                $ore = '\Botlife\Entity\Bar\Item\\' . $item;
+                $ore = '\Botlife\Entity\Bar\Item\Ore\\' . $item;
                 $ore = new $ore;
                 if (!$user->inventory->hasItemAmount($ore, $amount)) {
                     $metDeps = false;
@@ -80,7 +80,7 @@ class Smith extends \Botlife\Command\ACommand
             if ($metDeps) {
                 $user->inventory->incItemAmount($bar);
                 foreach ($bar->smithDeps as $item => $amount) {
-                    $ore = '\Botlife\Entity\Bar\Item\\' . $item;
+                    $ore = '\Botlife\Entity\Bar\Item\Ore\\' . $item;
                     $ore = new $ore;
                     $user->inventory->decItemAmount($ore, $amount);
                 }
@@ -90,7 +90,7 @@ class Smith extends \Botlife\Command\ACommand
         if (!$barsMade) {
             $deps = array();
             foreach ($bar->smithDeps as $item => $amount) {
-                $ore = '\Botlife\Entity\Bar\Item\\' . $item;
+                $ore = '\Botlife\Entity\Bar\Item\Ore\\' . $item;
                 $ore = new $ore;
                 $deps[] = $c(3, $ore->name) . $c(12, ' = ') . $c(3, $amount);
             }

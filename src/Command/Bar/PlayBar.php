@@ -2,7 +2,7 @@
 
 namespace Botlife\Command\Bar;
 
-use \Botlife\Entity\Bar\Item\BronzePickaxe;
+use \Botlife\Entity\Bar\Item\Pickaxe\BronzePickaxe;
 
 class PlayBar extends \Botlife\Command\ACommand
 {

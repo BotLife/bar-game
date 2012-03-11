@@ -1,8 +1,8 @@
 <?php
 
-namespace Botlife\Entity\Bar\Item;
+namespace Botlife\Entity\Bar\Item\Ore;
 
-class Copper extends Ore
+class Copper extends Botlife\Entity\Bar\Item\Ore
 {
 
     public $id      = 111;

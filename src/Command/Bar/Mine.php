@@ -62,15 +62,19 @@ class Mine extends \Botlife\Command\ACommand
         $ores /= $ore->quality;
         $ores = round($ores);
         $user->inventory->incItemAmount($ore, $ores);
+        
+        $user->lastPlayed = time();
+        $user->waitTime   = round(mt_rand(5, 15) * 60 * 0.91, 0);
+        $waitTime = ($user->lastPlayed + $user->waitTime) - time();
         $this->respondWithPrefix(sprintf(
             'You just mined ' . $c(3, '%s %s') . $c(12, ' with your ')
                 . $c(3, '%s') . $c(12, '! You now have ') . $c(3, '%s %s')
-                . $c(12, '.'),
+                . $c(12, '. Only ') . $c(3, '%s')
+                . $c(12, ' left till you can mine again!'),
             number_format($ores), $ore->name, $pickaxe->name,
-            $user->inventory->getItemAmount($ore), $ore->name
+            $user->inventory->getItemAmount($ore), $ore->name,
+            gmdate('i:s', $waitTime)
         ));
-        $user->lastPlayed = time();
-        $user->waitTime   = round(mt_rand(5, 15) * 60 * 0.91, 0);
     }
     
     public function randomOre($user)
@@ -101,7 +105,7 @@ class Mine extends \Botlife\Command\ACommand
                 $chance[] = $state;
             }
         }
-        $ore = '\Botlife\Entity\Bar\Item\\' . $chance[mt_rand(0, 99)];
+        $ore = '\Botlife\Entity\Bar\Item\Ore\\' . $chance[mt_rand(0, 99)];
         return new $ore;
     }
 
