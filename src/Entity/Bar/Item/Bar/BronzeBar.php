@@ -2,7 +2,7 @@
 
 namespace Botlife\Entity\Bar\Item\Bar;
 
-class BronzeBar extends Botlife\Entity\Bar\Item\Bar
+class BronzeBar extends \Botlife\Entity\Bar\Item\Bar
 {
 
     public $id         = 101;

@@ -2,7 +2,7 @@
 
 namespace Botlife\Entity\Bar\Item\Pickaxe;
 
-class RunePickaxe extends Botlife\Entity\Bar\Item\Pickaxe
+class RunePickaxe extends \Botlife\Entity\Bar\Item\Pickaxe
 {
 
     public $id      = 121;

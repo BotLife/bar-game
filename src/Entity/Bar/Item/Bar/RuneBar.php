@@ -2,7 +2,7 @@
 
 namespace Botlife\Entity\Bar\Item\Bar;
 
-class RuneBar extends Botlife\Entity\Bar\Item\Bar
+class RuneBar extends \Botlife\Entity\Bar\Item\Bar
 {
 
     public $id         = 102;

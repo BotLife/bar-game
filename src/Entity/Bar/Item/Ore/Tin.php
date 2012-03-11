@@ -2,7 +2,7 @@
 
 namespace Botlife\Entity\Bar\Item\Ore;
 
-class Tin extends Botlife\Entity\Bar\Item\Ore
+class Tin extends \Botlife\Entity\Bar\Item\Ore
 {
 
     public $id      = 112;

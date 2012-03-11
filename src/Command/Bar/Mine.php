@@ -80,9 +80,10 @@ class Mine extends \Botlife\Command\ACommand
     public function randomOre($user)
     {
         $items  = array();
-        $items['Tin']     = 35;
+        $items['Tin']     = 30;
         $items['Copper']  = 35;
         $items['Coal']    = 25;
+        $items['GoldOre'] = true;
         $items['RuneOre'] = true;
         $chance = array();
         $left   = 100;
