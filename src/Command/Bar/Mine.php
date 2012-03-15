@@ -15,6 +15,10 @@ class Mine extends \Botlife\Command\ACommand
     
     public $needsAuth = true;
     
+    public $ores      = array(
+        'Tin', 'Copper', 'Coal', 'GoldOre', 'RuneOre'    
+    );
+    
     public function run($event)
     {
         $this->detectResponseType($event->message);
@@ -56,7 +60,7 @@ class Mine extends \Botlife\Command\ACommand
     {
         $c   = new \Botlife\Application\Colors;
         $pickaxe = $user->inventory->getBestOfKind(new Pickaxe);
-        $ore = $this->randomOre($user);
+        $ore = $this->randomOre($user, $pickaxe);
         $ores = round(mt_rand(1, 5) * 10 * 0.37, 0);
         $ores *= $pickaxe->quality; 
         $ores /= $ore->quality;
@@ -80,19 +84,19 @@ class Mine extends \Botlife\Command\ACommand
     public function randomOre($user)
     {
         $items  = array();
-        $items['Tin']     = 30;
-        $items['Copper']  = 35;
-        $items['Coal']    = 25;
-        $items['GoldOre'] = true;
-        $items['RuneOre'] = true;
+        foreach ($this->ores as $ore) {
+            $item = '\Botlife\Entity\Bar\Item\Ore\\' . $ore;
+            $item = new $item;
+            $items[$ore] = $item->mineChance;
+        }
         $chance = array();
         $left   = 100;
         $amount = 0;
         foreach ($items as $state => $percentage) {
-            if (is_numeric($percentage)) {
-                $left -= $percentage;
-            } elseif (is_bool($percentage)) {
+            if ($percentage == -1) {
                 ++$amount;
+            } else {
+                $left -= $percentage;
             }
         }
         $each   = floor($left / $amount);

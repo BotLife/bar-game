@@ -2,7 +2,7 @@
 
 namespace Botlife\Command\Bar;
 
-use \Botlife\Entity\Bar\Item\BronzeBar;
+use \Botlife\Entity\Bar\Item\Bar\BronzeBar;
 
 class Bar extends \Botlife\Command\ACommand
 {

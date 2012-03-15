@@ -9,5 +9,6 @@ class Copper extends \Botlife\Entity\Bar\Item\Ore
     public $name       = 'Copper ore';
     public $pluralName = 'Copper ores';
     public $quality    = 1;
+    public $mineChance = 25;
 
 }

@@ -4,6 +4,7 @@ namespace Botlife\Command\Bar;
 
 use \Botlife\Entity\Bar\Item\Bar\BronzeBar;
 use \Botlife\Entity\Bar\Item\Bar\RuneBar;
+use \Botlife\Entity\Bar\Item\Bar\GoldBar;
 
 class Smith extends \Botlife\Command\ACommand
 {
@@ -51,11 +52,14 @@ class Smith extends \Botlife\Command\ACommand
             case 'runite':
                 $barType = new RuneBar;
                 break;
+            case 'gold':
+                $barType = new GoldBar;
+                break;
         }
         if (!isset($barType)) {
             $this->respondWithPrefix(
-                'Damn I don\'t know that kind of bar... Did you mean '
-                    . 'bronze or rune?'
+                'Damn I don\'t know that kind of bar... Did you mean one of '
+                    . 'the following: bronze, gold or rune?'
             );
             return;
         }
