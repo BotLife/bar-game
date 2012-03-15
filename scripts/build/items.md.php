@@ -5,7 +5,7 @@ ob_start();
 
 defined('APPLICATION_PATH') || define(
     'APPLICATION_PATH',
-    realpath(dirname(__FILE__) . '/../../BotLife/src')
+    $_SERVER['argv'][2]
 );
 
 set_include_path(
