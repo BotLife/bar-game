@@ -1,26 +1,2 @@
-#!/usr/bin/env php
-<?php
-
-defined('APPLICATION_PATH') || define(
-    'APPLICATION_PATH',
-    realpath(dirname(__FILE__) . '/src')
-);
-
-set_include_path(
-    implode(
-        PATH_SEPARATOR,
-        array(
-            realpath(APPLICATION_PATH . '/library'),
-            APPLICATION_PATH,
-            get_include_path(),
-        )
-    )
-);
-
-require_once 'Application.php';
-require_once 'Application/Autoloader.php';
-require_once 'IRCBot/src/shortFunctions.php';
-
-$application = new \BotLife\Application();
-$application->bootstrap()
-    ->run();
+#!/bin/sh
+BotLife/run
