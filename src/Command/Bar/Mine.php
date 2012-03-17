@@ -55,28 +55,20 @@ class Mine extends \Botlife\Command\ACommand
             return;
         }
         if (isset($event->matches['ore'])) {
-            $oreAliases = array();
+            $ores = array();
             foreach ($this->ores as $ore) {
-                $item = '\Botlife\Entity\Bar\Item\Ore\\' . $ore;
-                $item = new $item;
-                $oreAliases[$item->name] = $item;
-                if (isset($item->alias)) {
-                    foreach ($item->alias as $alias) {
-                        $oreAliases[strtolower($alias)] = $item;
-                    }
-                }
+                $ores[] = '\Botlife\Entity\Bar\Item\Ore\\' . $ore;
             }
-            unset($ore);
-            if (!isset($oreAliases[strtolower($event->matches['ore'])])) {
+            $ore = \Botlife\Entity\Bar\ItemDb::getItem($event->matches['ore'], $ores);
+            if (!$ore) {
                 $this->respondWithPrefix(sprintf(
             		'Mmm I don\'t know a ore named ' .  $c(3, '%s') . $c(12, '.'),
                     strtolower($event->matches['ore'])
                 ));
                 return;
             }
-            
-            if (mt_rand(1, 4) == 2) {
-                $ore = $oreAliases[strtolower($event->matches['ore'])];
+            if (mt_rand(1, 4) != 2) {
+                unset($ore);
             }
         };
         $this->mine($event, $user, (isset($ore)) ? $ore : null);
