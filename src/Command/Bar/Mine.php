@@ -2,13 +2,15 @@
 
 namespace Botlife\Command\Bar;
 
+use Ircbot\Type\MessageCommand;
+
 use \Botlife\Entity\Bar\Item\Pickaxe;
 
 class Mine extends \Botlife\Command\ACommand
 {
 
     public $regex     = array(
-        '/^[.!]mine$/i',
+        '/^[.!]mine( )?(?P<ore>.+)?$/i',
     );
     public $action    = 'run';
     public $code      = 'mine';
@@ -48,19 +50,46 @@ class Mine extends \Botlife\Command\ACommand
             $waitTime = ($user->lastPlayed + $user->waitTime) - time();
             $this->respondWithPrefix(
                 'You still need to wait ' . gmdate('i:s', $waitTime)
-                    . ' seconds before you can use bar again'
+                    . ' seconds before you can play The Bar Game again'
             );
             return;
         }
-        $this->mine($user);
+        if (isset($event->matches['ore'])) {
+            $oreAliases = array();
+            foreach ($this->ores as $ore) {
+                $item = '\Botlife\Entity\Bar\Item\Ore\\' . $ore;
+                $item = new $item;
+                $oreAliases[$item->name] = $item;
+                if (isset($item->alias)) {
+                    foreach ($item->alias as $alias) {
+                        $oreAliases[strtolower($alias)] = $item;
+                    }
+                }
+            }
+            unset($ore);
+            if (!isset($oreAliases[strtolower($event->matches['ore'])])) {
+                $this->respondWithPrefix(sprintf(
+            		'Mmm I don\'t know a ore named ' .  $c(3, '%s') . $c(12, '.'),
+                    strtolower($event->matches['ore'])
+                ));
+                return;
+            }
+            
+            if (mt_rand(1, 4) == 2) {
+                $ore = $oreAliases[strtolower($event->matches['ore'])];
+            }
+        };
+        $this->mine($event, $user, (isset($ore)) ? $ore : null);
         \Botlife\Application\Storage::saveData('bar', $bar);
     }
     
-    public function mine(&$user)
+    public function mine($event, &$user, $ore)
     {
         $c   = new \Botlife\Application\Colors;
         $pickaxe = $user->inventory->getBestOfKind(new Pickaxe);
-        $ore = $this->randomOre($user, $pickaxe);
+        if (!$ore) {
+            $ore = $this->randomOre($user);
+        }
         $ores = round(mt_rand(1, 5) * 10 * 0.37, 0);
         $ores *= $pickaxe->quality; 
         $ores /= $ore->quality;

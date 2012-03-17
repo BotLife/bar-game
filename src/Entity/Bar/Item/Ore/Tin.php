@@ -8,6 +8,6 @@ class Tin extends \Botlife\Entity\Bar\Item\Ore
     public $id         = 112;
     public $name       = 'Tin';
     public $quality    = 1;
-    public $mineChance = 25;
+    public $mineChance = 33;
 
 }
