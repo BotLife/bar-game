@@ -11,6 +11,8 @@ class AItem
     
     public $quality = 1;
     
+    public $gePrice = false;
+    
     public function getName($amount)
     {
         if (!$this->pluralName) {

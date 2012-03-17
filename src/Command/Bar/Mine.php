@@ -55,11 +55,7 @@ class Mine extends \Botlife\Command\ACommand
             return;
         }
         if (isset($event->matches['ore'])) {
-            $ores = array();
-            foreach ($this->ores as $ore) {
-                $ores[] = '\Botlife\Entity\Bar\Item\Ore\\' . $ore;
-            }
-            $ore = \Botlife\Entity\Bar\ItemDb::getItem($event->matches['ore'], $ores);
+            $ore = \Botlife\Entity\Bar\ItemDb::getItem($event->matches['ore']);
             if (!$ore) {
                 $this->respondWithPrefix(sprintf(
             		'Mmm I don\'t know a ore named ' .  $c(3, '%s') . $c(12, '.'),
@@ -120,7 +116,7 @@ class Mine extends \Botlife\Command\ACommand
                 $left -= $percentage;
             }
         }
-        $each   = floor($left / $amount);
+        $each   = @floor($left / $amount);
         foreach ($items as $state => $percentage) {
             if (is_bool($percentage)) {
                 $items[$state] = $each;

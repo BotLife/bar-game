@@ -39,14 +39,7 @@ class Smith extends \Botlife\Command\ACommand
             );
             return;
         }
-        $barType = \Botlife\Entity\Bar\ItemDb::getItem(
-            $event->matches['type'],
-            array(
-            	'\Botlife\Entity\Bar\Item\Bar\BronzeBar',
-                '\Botlife\Entity\Bar\Item\Bar\GoldBar',
-                '\Botlife\Entity\Bar\Item\Bar\RuneBar',
-        	)
-        );
+        $barType = \Botlife\Entity\Bar\ItemDb::getItem($event->matches['type']);
         if (!$barType) {
             $this->respondWithPrefix(
                 'Damn I don\'t know that kind of bar... Did you mean one of '

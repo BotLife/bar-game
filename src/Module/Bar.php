@@ -2,6 +2,8 @@
 
 namespace Botlife\Module;
 
+use \Botlife\Entity\Bar\ItemDb;
+
 class Bar extends AModule
 {
 
@@ -13,5 +15,38 @@ class Bar extends AModule
         '\Botlife\Command\Bar\Smith',
         '\Botlife\Command\Bar\Admin\Give',
     );
+    
+    public $events  = array(
+    	'loopIterate',
+    );
+    
+    public function __construct()
+    {
+        ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Bar\BronzeBar);
+        ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Bar\IronBar);
+        ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Bar\GoldBar);
+        ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Bar\RuneBar);
+        ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Ore\Tin);
+        ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Ore\Copper);
+        ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Ore\Coal);
+        ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Ore\GoldOre);
+        ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Ore\RuneOre);
+        ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Pickaxe\BronzePickaxe);
+        ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Pickaxe\RunePickaxe);
+        parent::__construct();
+    }
+    
+    public $lastTimerRun = 0;
+    
+    public function loopIterate()
+    {
+        if ((time() - $this->lastTimerRun) >= 1) {
+            if ((time() - ItemDb::$geLastUpdate) >= ItemDB::$geUpdateInterval
+              || ItemDb::$geNeedsUpdate) {
+                ItemDb::runUpdates();
+            }
+            $this->lastTimerRun = time();
+        }
+    }
 
 }

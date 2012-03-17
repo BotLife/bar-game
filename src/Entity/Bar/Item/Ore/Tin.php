@@ -5,9 +5,10 @@ namespace Botlife\Entity\Bar\Item\Ore;
 class Tin extends \Botlife\Entity\Bar\Item\Ore
 {
 
-    public $id         = 112;
-    public $name       = 'Tin';
+    public $id         = 438;
+    public $name       = 'Tin ore';
+    public $pluralName = 'Tin ores';
     public $quality    = 1;
-    public $mineChance = 33;
+    public $mineChance = 33.3;
 
 }
