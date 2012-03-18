@@ -20,12 +20,10 @@ class Give extends \Botlife\Command\ACommand
         if (!$user) {
             return;
         }
-        $itemClass = str_replace(' ', '', ucwords($event->matches['item']));
-        $item = '\Botlife\Entity\Bar\Item\\' . $itemClass;
-        if (!class_exists($item)) {
+        $item = \Botlife\Entity\Bar\ItemDb::getItem($event->matches['item']);
+        if (!$item) {
             return;
         }
-        $item = new $item;
         $user->inventory->incItemAmount($item, (int) $event->matches['amount']);
         \Botlife\Application\Storage::saveData('bar', $bar);
     }

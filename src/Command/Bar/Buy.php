@@ -4,14 +4,14 @@ namespace Botlife\Command\Bar;
 
 use \Botlife\Entity\Bar\ItemDb;
 
-class Sell extends \Botlife\Command\ACommand
+class Buy extends \Botlife\Command\ACommand
 {
 
     public $regex     = array(
-        '/^[.!@]sell(( (?P<amount>\d))? (?P<item>.+))?$/i',
+        '/^[.!@]buy(( (?P<amount>\d))? (?P<item>.+))?$/i',
     );
     public $action    = 'run';
-    public $code      = 'sell';
+    public $code      = 'buy';
     
     public $needsAuth = true;
     
@@ -36,9 +36,8 @@ class Sell extends \Botlife\Command\ACommand
         }
         if (!isset($event->matches['item'])) {
             $this->respondWithPrefix(
-                'So you\'re into earning some money? Sure, but you need to '
-                	. 'define what you want to sell. Example: '
-                    . '!sell bronze bar'
+                'Please define what item you want to buy. Example: '
+                    . '!buy rune pickaxe'
             );
             return;
         }
@@ -62,30 +61,32 @@ class Sell extends \Botlife\Command\ACommand
         } else {
             $amount = 1;
         }
+        $price = $price * $amount;
+        $coin = new \Botlife\Entity\Bar\Item\Coin;
         $user = $bar->users[strtolower($event->auth)];
-        if (!$user->inventory->hasItemAmount($item, $amount)) {
+        if (!$user->inventory->hasItemAmount($coin, $price)) {
             $this->respondWithPrefix(sprintf(
-            	'You don\'t have %s %s',
-            	$amount, $item->getName($amount)
+            	'You need %s %s',
+            	number_format($price), $coin->getName($price)
             ));
             return;
         }
-        $this->sell($user, $item, ($price * $amount), $amount);
+        $this->buy($user, $item, $price, $amount);
         \Botlife\Application\Storage::saveData('bar', $bar);
     }
     
-    public function sell($user, $item, $price, $amount)
+    public function buy($user, $item, $price, $amount)
     {
         $c   = new \Botlife\Application\Colors;
         $coin = new \Botlife\Entity\Bar\Item\Coin;
         $math = new \Botlife\Utility\Math;
-        $user->inventory->incItemAmount($coin, $price);
-        $user->inventory->decItemAmount($item, $amount);
+        $user->inventory->decItemAmount($coin, $price);
+        $user->inventory->incItemAmount($item, $amount);
         $this->respondWithPrefix(sprintf(
-            'You just sold ' . $c(3, '%s %s') . $c(12, ' for ') 
+            'You just bought ' . $c(3, '%s %s') . $c(12, ' for ') 
                 . $c(3, '%s %s.'),
             number_format($amount), $item->getName($amount),
-            $math->alphaRound($price,2), $coin->getName($price)
+            $math->alphaRound($price, 2), $coin->getName($price)
         ));
     }
 

@@ -15,6 +15,7 @@ class Bar extends AModule
         '\Botlife\Command\Bar\Smith',
         
     	'\Botlife\Command\Bar\Sell',
+    	'\Botlife\Command\Bar\Buy',
     
         '\Botlife\Command\Bar\Admin\Give',
     );
@@ -47,7 +48,7 @@ class Bar extends AModule
     
     public function loopIterate()
     {
-        if ((time() - $this->lastTimerRun) >= 10) {
+        if ((time() - $this->lastTimerRun) >= 1) {
             if ((time() - ItemDb::$geLastUpdate) >= ItemDB::$geUpdateInterval
               || ItemDb::$geNeedsUpdate) {
                 ItemDb::runUpdates();
