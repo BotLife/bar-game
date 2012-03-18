@@ -25,10 +25,21 @@ class Inv extends \Botlife\Command\ACommand
         $bar   = \Botlife\Application\Storage::loadData('bar');
         $user  = $bar->users->{strtolower($event->auth)};
         $items = $user->inventory->getItemList();
+        $math  = new \Botlife\Utility\Math;
         $tmp   = array();
         foreach ($items as $item => $amount) {
             $class = new $item;
-            $tmp[$class->name] = $amount;
+            $alpha = $math->alphaRound($amount);
+            if ((string) $amount != $alpha) {
+                $tmp[$class->getName($amount)] = array(
+                    number_format($amount),
+                    array(
+                        $alpha
+                    )
+                );
+            } else {
+                $tmp[$class->getName($amount)] = number_format($amount);
+            }
         }
         $this->respondWithInformation(
             $tmp

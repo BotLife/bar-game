@@ -48,6 +48,14 @@ class ItemDb
         }
     }
     
+    public static function getPrice($item)
+    {
+        if (isset(self::$_prices[$item->id])) {
+            return self::$_prices[$item->id];
+        }
+        return false;
+    }
+    
     public static function runUpdates()
     {
         $debug = new \Botlife\Debug;
