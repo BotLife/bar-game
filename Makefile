@@ -1,6 +1,6 @@
 BUILD=`pwd`/build
 WIKI_PAGES=items.md commands.md
-BOTLIFE_PATH=`pwd`/BotLife/src
+BOTLIFE_PATH=$(shell pwd)/BotLife/src
 
 
 .PHONY: $(addsuffix .php,$(WIKI_PAGES)) 

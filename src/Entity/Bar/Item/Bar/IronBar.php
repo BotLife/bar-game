@@ -5,6 +5,6 @@ namespace Botlife\Entity\Bar\Item\Bar;
 class IronBar extends \Botlife\Entity\Bar\Item\Bar
 {
 
-    public $id = 102;
+    public $id = 2351;
 
 }

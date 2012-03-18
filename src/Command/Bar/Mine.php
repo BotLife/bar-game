@@ -2,13 +2,15 @@
 
 namespace Botlife\Command\Bar;
 
+use Ircbot\Type\MessageCommand;
+
 use \Botlife\Entity\Bar\Item\Pickaxe;
 
 class Mine extends \Botlife\Command\ACommand
 {
 
     public $regex     = array(
-        '/^[.!]mine$/i',
+        '/^[.!]mine( )?(?P<ore>.+)?$/i',
     );
     public $action    = 'run';
     public $code      = 'mine';
@@ -16,7 +18,8 @@ class Mine extends \Botlife\Command\ACommand
     public $needsAuth = true;
     
     public $ores      = array(
-        'Tin', 'Copper', 'Coal', 'GoldOre', 'RuneOre'    
+        'Tin', 'Copper', 'Coal', 'MithrilOre', 'AdamantOre', 'GoldOre',
+        'RuneOre'    
     );
     
     public function run($event)
@@ -48,19 +51,37 @@ class Mine extends \Botlife\Command\ACommand
             $waitTime = ($user->lastPlayed + $user->waitTime) - time();
             $this->respondWithPrefix(
                 'You still need to wait ' . gmdate('i:s', $waitTime)
-                    . ' seconds before you can use bar again'
+                    . ' seconds before you can play The Bar Game again'
             );
             return;
         }
-        $this->mine($user);
+        if (isset($event->matches['ore'])) {
+            $ore = \Botlife\Entity\Bar\ItemDb::getItem(
+                $event->matches['ore'],
+                new \Botlife\Entity\Bar\Item\Ore
+            );
+            if (!$ore) {
+                $this->respondWithPrefix(sprintf(
+            		'Mmm I don\'t know a ore named ' .  $c(3, '%s') . $c(12, '.'),
+                    strtolower($event->matches['ore'])
+                ));
+                return;
+            }
+            if (mt_rand(1, 4) != 2) {
+                unset($ore);
+            }
+        };
+        $this->mine($event, $user, (isset($ore)) ? $ore : null);
         \Botlife\Application\Storage::saveData('bar', $bar);
     }
     
-    public function mine(&$user)
+    public function mine($event, &$user, $ore)
     {
         $c   = new \Botlife\Application\Colors;
         $pickaxe = $user->inventory->getBestOfKind(new Pickaxe);
-        $ore = $this->randomOre($user, $pickaxe);
+        if (!$ore) {
+            $ore = $this->randomOre($user);
+        }
         $ores = round(mt_rand(1, 5) * 10 * 0.37, 0);
         $ores *= $pickaxe->quality; 
         $ores /= $ore->quality;
@@ -83,35 +104,15 @@ class Mine extends \Botlife\Command\ACommand
     
     public function randomOre($user)
     {
-        $items  = array();
+        $chance = array();
         foreach ($this->ores as $ore) {
             $item = '\Botlife\Entity\Bar\Item\Ore\\' . $ore;
             $item = new $item;
-            $items[$ore] = $item->mineChance;
+            $tmp = array_fill(0, (50 - $item->quality), $item->id);
+            $chance = array_merge($chance, $tmp);
         }
-        $chance = array();
-        $left   = 100;
-        $amount = 0;
-        foreach ($items as $state => $percentage) {
-            if ($percentage == -1) {
-                ++$amount;
-            } else {
-                $left -= $percentage;
-            }
-        }
-        $each   = floor($left / $amount);
-        foreach ($items as $state => $percentage) {
-            if (is_bool($percentage)) {
-                $items[$state] = $each;
-            }
-        }
-        foreach ($items as $state => $percentage) {
-            for ($i = 0; $i < $percentage; ++$i) {
-                $chance[] = $state;
-            }
-        }
-        $ore = '\Botlife\Entity\Bar\Item\Ore\\' . $chance[mt_rand(0, 99)];
-        return new $ore;
+        $random = $chance[mt_rand(0, (count($chance) - 1))];
+        return \Botlife\Entity\Bar\ItemDb::getItem($random);
     }
 
 }
