@@ -15,7 +15,7 @@ class ItemDb
     
     public static $geNeedsUpdate    = false;
     public static $geLastUpdate     = 0;
-    public static $geUpdateInterval = 120;
+    public static $geUpdateInterval = 43200;
     
     public static function getItem($name)
     {
