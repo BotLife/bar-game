@@ -37,7 +37,11 @@ class Inventory
 
     public function setItemAmount(AItem $item, $amount)
     {
-        $this->items[get_class($item)] = $amount; 
+        if ($amount == 0) {
+            unset($this->items[get_class($item)]);
+        } else {
+            $this->items[get_class($item)] = $amount; 
+        }
     }
     
     public function incItemAmount(AItem $item, $amount = 1)
@@ -46,11 +50,7 @@ class Inventory
     }
     public function decItemAmount(AItem $item, $amount = 1)
     {
-        if (($this->getItemAmount($item) - $amount) == 0) {
-            unset($this->items[get_class($item)]);
-        } else {
-            $this->setItemAmount($item, $this->getItemAmount($item) - $amount);
-        }
+        $this->setItemAmount($item, $this->getItemAmount($item) - $amount);
     }
     
     public function getBestOfKind(AItem $item)
@@ -61,11 +61,17 @@ class Inventory
         $best = array(0, '');
         foreach ($this->items as $sort => $amount) {
             $sort = new $sort;
+            if ($amount == 0) {
+                continue;
+            }
             if ($sort instanceof $item) {
                 if ($best[0] < $sort->quality) {
                     $best = array($sort->quality, $sort);
                 }
             }
+        }
+        if (!$best[0]) {
+            return false;
         }
         return $best[1];
     }

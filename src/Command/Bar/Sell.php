@@ -8,7 +8,7 @@ class Sell extends \Botlife\Command\ACommand
 {
 
     public $regex     = array(
-        '/^[.!@]sell(( (?P<amount>\d))? (?P<item>.+))?$/i',
+        '/^[.!@]sell(( (?P<amount>\d{1,}))? (?P<item>.+))?$/i',
     );
     public $action    = 'run';
     public $code      = 'sell';
@@ -57,7 +57,8 @@ class Sell extends \Botlife\Command\ACommand
             ));
             return;
         }
-        if (isset($event->matches['amount']) && (int) $event->matches['amount']) {
+        if (isset($event->matches['amount'])
+          && (int) $event->matches['amount']) {
             $amount = (int) $event->matches['amount'];
         } else {
             $amount = 1;
@@ -66,7 +67,7 @@ class Sell extends \Botlife\Command\ACommand
         if (!$user->inventory->hasItemAmount($item, $amount)) {
             $this->respondWithPrefix(sprintf(
             	'You don\'t have %s %s',
-            	$amount, $item->getName($amount)
+            	($amount == 1) ? 'a' : $amount, $item->getName($amount)
             ));
             return;
         }

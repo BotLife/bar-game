@@ -18,7 +18,8 @@ class Mine extends \Botlife\Command\ACommand
     public $needsAuth = true;
     
     public $ores      = array(
-        'Tin', 'Copper', 'Coal', 'GoldOre', 'RuneOre'    
+        'Tin', 'Copper', 'Coal', 'MithrilOre', 'AdamantOre', 'GoldOre',
+        'RuneOre'    
     );
     
     public function run($event)
@@ -55,7 +56,10 @@ class Mine extends \Botlife\Command\ACommand
             return;
         }
         if (isset($event->matches['ore'])) {
-            $ore = \Botlife\Entity\Bar\ItemDb::getItem($event->matches['ore']);
+            $ore = \Botlife\Entity\Bar\ItemDb::getItem(
+                $event->matches['ore'],
+                new \Botlife\Entity\Bar\Item\Ore
+            );
             if (!$ore) {
                 $this->respondWithPrefix(sprintf(
             		'Mmm I don\'t know a ore named ' .  $c(3, '%s') . $c(12, '.'),
@@ -100,35 +104,15 @@ class Mine extends \Botlife\Command\ACommand
     
     public function randomOre($user)
     {
-        $items  = array();
+        $chance = array();
         foreach ($this->ores as $ore) {
             $item = '\Botlife\Entity\Bar\Item\Ore\\' . $ore;
             $item = new $item;
-            $items[$ore] = $item->mineChance;
+            $tmp = array_fill(0, (50 - $item->quality), $item->id);
+            $chance = array_merge($chance, $tmp);
         }
-        $chance = array();
-        $left   = 100;
-        $amount = 0;
-        foreach ($items as $state => $percentage) {
-            if ($percentage == -1) {
-                ++$amount;
-            } else {
-                $left -= $percentage;
-            }
-        }
-        $each   = @floor($left / $amount);
-        foreach ($items as $state => $percentage) {
-            if (is_bool($percentage)) {
-                $items[$state] = $each;
-            }
-        }
-        foreach ($items as $state => $percentage) {
-            for ($i = 0; $i < $percentage; ++$i) {
-                $chance[] = $state;
-            }
-        }
-        $ore = '\Botlife\Entity\Bar\Item\Ore\\' . $chance[mt_rand(0, 99)];
-        return new $ore;
+        $random = $chance[mt_rand(0, (count($chance) - 1))];
+        return \Botlife\Entity\Bar\ItemDb::getItem($random);
     }
 
 }

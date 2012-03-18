@@ -9,7 +9,6 @@ class GoldOre extends \Botlife\Entity\Bar\Item\Ore
     public $name       = 'Gold ore';
     public $pluralName = 'Gold ores';
     public $alias      = array('gold');
-    public $quality    = 20;
-    public $mineChance = 20;
+    public $quality    = 10;
 
 }

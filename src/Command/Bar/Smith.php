@@ -39,11 +39,13 @@ class Smith extends \Botlife\Command\ACommand
             );
             return;
         }
-        $barType = \Botlife\Entity\Bar\ItemDb::getItem($event->matches['type']);
+        $barType = \Botlife\Entity\Bar\ItemDb::getItem(
+            $event->matches['type'], new \Botlife\Entity\Bar\Item\Bar
+        );
         if (!$barType) {
             $this->respondWithPrefix(
                 'Damn I don\'t know that kind of bar... Did you mean one of '
-                    . 'the following: bronze, gold or rune?'
+                    . 'the following: bronze bar, gold bar or rune bar?'
             );
             return;
         }
@@ -80,7 +82,8 @@ class Smith extends \Botlife\Command\ACommand
             foreach ($bar->smithDeps as $item => $amount) {
                 $ore = '\Botlife\Entity\Bar\Item\Ore\\' . $item;
                 $ore = new $ore;
-                $deps[] = $c(3, $ore->name) . $c(12, ' = ') . $c(3, $amount);
+                $deps[] = $c(3, $ore->getName($amount)) . $c(12, ' = ')
+                    . $c(3, $amount);
             }
             $this->respondWithPrefix(sprintf(
                 'You need the following resources to make a ' . $c(3, '%s') 
@@ -92,8 +95,9 @@ class Smith extends \Botlife\Command\ACommand
         $this->respondWithPrefix(sprintf(
             'You just made ' . $c(3, '%s %s') . $c(12, '! You now have ')
                 . $c(3, '%s %s') . $c(12, '.'),
-            number_format($barsMade), $bar->name,
-            $user->inventory->getItemAmount($bar), $bar->name
+            number_format($barsMade), $bar->getName($barsMade),
+            number_format($user->inventory->getItemAmount($bar)),
+            $bar->getName($barsMade)
         ));
     }
 

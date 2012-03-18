@@ -8,7 +8,7 @@ class Buy extends \Botlife\Command\ACommand
 {
 
     public $regex     = array(
-        '/^[.!@]buy(( (?P<amount>\d))? (?P<item>.+))?$/i',
+        '/^[.!@]buy(( (?P<amount>\d{1,}))? (?P<item>.+))?$/i',
     );
     public $action    = 'run';
     public $code      = 'buy';

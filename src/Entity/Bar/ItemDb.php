@@ -17,10 +17,22 @@ class ItemDb
     public static $geLastUpdate     = 0;
     public static $geUpdateInterval = 43200;
     
-    public static function getItem($name)
+    public static function getItem($item, $type = null)
     {
-        if (isset(self::$_cache[strtolower($name)])) {
-            return new self::$_cache[strtolower($name)];
+        if (is_string($item)) {
+            $name = $item;
+            if (isset(self::$_cache[strtolower($name)])) {
+                $item = new self::$_cache[strtolower($name)];
+                if ($type) {
+                    return ($item instanceof $type) ? $item : false;
+                } else {
+                    return $item;
+                }
+            }
+        } elseif (is_numeric($item)) {
+            if (isset(self::$_items[$item])) {
+                return self::$_items[$item];
+            }
         }
         return false;
     }

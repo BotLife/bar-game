@@ -10,6 +10,5 @@ class RuneOre extends \Botlife\Entity\Bar\Item\Ore
     public $pluralName = 'Runite ores';
     public $alias      = array('rune', 'runite');
     public $quality    = 25;
-    public $mineChance = 12.5;
 
 }

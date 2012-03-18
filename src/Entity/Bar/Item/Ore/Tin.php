@@ -10,6 +10,5 @@ class Tin extends \Botlife\Entity\Bar\Item\Ore
     public $pluralName = 'Tin ores';
     public $alias      = array('tin');
     public $quality    = 1;
-    public $mineChance = 33.3;
 
 }
