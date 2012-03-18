@@ -28,17 +28,22 @@ class Bar extends AModule
     {
         ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Bar\BronzeBar);
         ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Bar\IronBar);
+        ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Bar\MithrilBar);
+        ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Bar\AdamantBar);
         ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Bar\GoldBar);
         ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Bar\RuneBar);
         
         ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Ore\Tin);
         ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Ore\Copper);
         ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Ore\Coal);
+        ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Ore\MithrilOre);
+        ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Ore\AdamantOre);
         ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Ore\GoldOre);
         ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Ore\RuneOre);
         
         ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Pickaxe\BronzePickaxe);
         ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Pickaxe\RunePickaxe);
+        ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Pickaxe\DragonPickaxe);
         
         ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Coin);
         parent::__construct();

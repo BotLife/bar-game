@@ -30,16 +30,21 @@ $application->bootstrap();
 $items       = array(
     /* Bars */
     '\Botlife\Entity\Bar\Item\Bar\BronzeBar',
+    '\Botlife\Entity\Bar\Item\Bar\MithrilBar',
+    '\Botlife\Entity\Bar\Item\Bar\AdamantBar',
     '\Botlife\Entity\Bar\Item\Bar\RuneBar',
     '\Botlife\Entity\Bar\Item\Bar\GoldBar',
     /* Pickaxes */
     '\Botlife\Entity\Bar\Item\Pickaxe\BronzePickaxe',
     '\Botlife\Entity\Bar\Item\Pickaxe\RunePickaxe',
+	'\Botlife\Entity\Bar\Item\Pickaxe\DragonPickaxe',
     /* Ores */
     '\Botlife\Entity\Bar\Item\Ore\Tin',
     '\Botlife\Entity\Bar\Item\Ore\Copper',
     '\Botlife\Entity\Bar\Item\Ore\Coal',
     '\Botlife\Entity\Bar\Item\Ore\GoldOre',
+	'\Botlife\Entity\Bar\Item\Ore\MithrilOre',
+	'\Botlife\Entity\Bar\Item\Ore\AdamantOre',
     '\Botlife\Entity\Bar\Item\Ore\RuneOre',
 );
 
@@ -54,7 +59,7 @@ foreach ($items as $item) {
         $tmp['Pickaxes'][] = array($item->id, $item->name, $item->quality);
     } elseif ($item instanceof \Botlife\Entity\Bar\Item\Ore) {
         $tmp['Ores'][0] = array('Item ID', 'Ore', 'Quality', 'Mining chance');
-        $mineChance = ($item->mineChance != -1) ? $item->mineChance : 'Auto';
+        $mineChance = (50 - $item->quality);
         $tmp['Ores'][] = array(
             $item->id, $item->name, $item->quality, $mineChance
         );
@@ -68,24 +73,24 @@ foreach ($tmp as $type => $table) {
     foreach ($table as $rowId => $row) {
         if ($rowId == 0) {
             $output .= '|' . str_repeat(
-                '|' . str_repeat('-', 17) . '|', count($row)
+                '|' . str_repeat('-', 20) . '|', count($row)
             ) . '|' . PHP_EOL;
         }
         $output .= '|';
         foreach ($row as $value) {
-            $output .= '| ' . str_pad($value, 16) . '|';
+            $output .= '| ' . str_pad($value, 19) . '|';
             
         }
         $output .= '|';
         if ($rowId == 0) {
             $output .= PHP_EOL . '|' . str_repeat(
-                '|' . str_repeat('-', 17) . '|', count($row)
+                '|' . str_repeat('-', 20) . '|', count($row)
             ) . '|';
         }
         $output .= PHP_EOL;
     }
     $output .= '|' . str_repeat(
-        '|' . str_repeat('-', 17) . '|', count($row)
+        '|' . str_repeat('-', 20) . '|', count($row)
     ) . '|' . PHP_EOL;
     $output .='```' . PHP_EOL . PHP_EOL;
 } 
