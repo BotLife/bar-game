@@ -6,7 +6,7 @@ class Inv extends \Botlife\Command\ACommand
 {
 
     public $regex     = array(
-        '/^[.!@]inv$/i',
+        '/^[.!@]inv(entory)?$/i',
     );
     public $action    = 'run';
     public $code      = 'inv';

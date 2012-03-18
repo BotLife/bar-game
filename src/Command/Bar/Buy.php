@@ -56,7 +56,8 @@ class Buy extends \Botlife\Command\ACommand
             ));
             return;
         }
-        if (isset($event->matches['amount'])) {
+        if (isset($event->matches['amount'])
+          && (int) $event->matches['amount']) {
             $amount = (int) $event->matches['amount'];
         } else {
             $amount = 1;
