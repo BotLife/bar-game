@@ -67,7 +67,7 @@ class Mine extends \Botlife\Command\ACommand
                 ));
                 return;
             }
-            if (mt_rand(1, 4) != 2) {
+            if (mt_rand(1, 3) != 2) {
                 unset($ore);
             }
         };
