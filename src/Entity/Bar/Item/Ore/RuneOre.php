@@ -8,7 +8,7 @@ class RuneOre extends \Botlife\Entity\Bar\Item\Ore
     public $id         = 451;
     public $name       = 'Runite ore';
     public $pluralName = 'Runite ores';
-    public $alias      = array('rune', 'runite');
+    public $alias      = array('rune', 'runite', 'rune ore');
     public $quality    = 25;
 
 }
