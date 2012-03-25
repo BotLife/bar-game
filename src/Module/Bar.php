@@ -22,6 +22,7 @@ class Bar extends AModule
     
     public $events  = array(
     	'loopIterate',
+    	'onCtcpRequest'
     );
     
     public function __construct()
@@ -59,6 +60,19 @@ class Bar extends AModule
                 ItemDb::runUpdates();
             }
             $this->lastTimerRun = time();
+        }
+    }
+    
+    public function onCtcpRequest(\Ircbot\Command\CtcpRequest $event)
+    {
+        if ($event->message == 'VERSION') {
+            $reply = new \Ircbot\Command\CtcpReply(
+            $event->mask->nickname,
+                    'VERSION The Bar Game version 1.0.2'
+            );
+            $bot = \Ircbot\Application::getInstance()->getBotHandler()
+            ->getBotById($event->botId);
+            $bot->sendRawData($reply);
         }
     }
 
