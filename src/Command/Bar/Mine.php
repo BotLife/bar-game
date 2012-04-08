@@ -24,7 +24,7 @@ class Mine extends \Botlife\Command\ACommand
     
     public function run($event)
     {
-        $this->detectResponseType($event->message);
+        $this->detectResponseType($event->message, $event->target);
         $c   = new \Botlife\Application\Colors;
         $bar = \Botlife\Application\Storage::loadData('bar');
         if (!$event->auth) {

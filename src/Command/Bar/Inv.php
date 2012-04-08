@@ -15,7 +15,7 @@ class Inv extends \Botlife\Command\ACommand
     
     public function run($event)
     {
-        $this->detectResponseType($event->message);
+        $this->detectResponseType($event->message, $event->target);
         if (!$event->auth) {
             $this->respondWithPrefix(
                 'In order to use bar you need to be logged in to NickServ'
