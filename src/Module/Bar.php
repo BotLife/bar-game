@@ -2,6 +2,7 @@
 
 namespace Botlife\Module;
 
+use \Botlife\Entity\Bar\ItemSearch;
 use \Botlife\Entity\Bar\ItemDb;
 
 class Bar extends AModule
@@ -47,6 +48,9 @@ class Bar extends AModule
         ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Pickaxe\DragonPickaxe);
         
         ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Coin);
+        
+        $itemSearch = new ItemSearch;
+        
         parent::__construct();
     }
     
