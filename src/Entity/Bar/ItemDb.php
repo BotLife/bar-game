@@ -60,6 +60,18 @@ class ItemDb
         }
     }
     
+    public static function getItemsUnderPrice($money)
+    {
+        $items = array();
+        foreach (self::$_items as $id => $item) {
+            $price = self::getPrice($item);
+            if ($price && $price < $money) {
+                $items[] = $item;
+            }
+        }
+        return $items;
+    }
+    
     public static function getPrice($item)
     {
         if (isset(self::$_prices[$item->id])) {

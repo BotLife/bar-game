@@ -18,6 +18,8 @@ class Bar extends AModule
     	'\Botlife\Command\Bar\Sell',
     	'\Botlife\Command\Bar\Buy',
     
+    	'\Botlife\Command\Bar\OpenChest',
+        
         '\Botlife\Command\Bar\Admin\Give',
     );
     
@@ -48,6 +50,8 @@ class Bar extends AModule
         ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Pickaxe\DragonPickaxe);
         
         ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Coin);
+        
+        ItemDb::loadItem(new \Botlife\Entity\Bar\Item\Chest);
         
         $itemSearch = new ItemSearch;
         
