@@ -7,11 +7,9 @@ class ItemPrice
     
     public function getPrice($itemId)
     {
-        $curl = curl_init(
-                	'http://rscript.org/lookup.php?type=ge&search=' . $itemId
+        $response = \DataGetter::getData(
+        	'file-content', 'http://rscript.org/lookup.php?type=ge&search=' . $itemId
         );
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($curl);
         $response = explode("\n", $response);
         foreach ($response as &$data) {
             $data = explode(': ', $data);

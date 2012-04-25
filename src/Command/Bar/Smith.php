@@ -92,6 +92,15 @@ class Smith extends \Botlife\Command\ACommand
             ));
             return;
         }
+        if (mt_rand(1, 50) == 40) {
+            $this->respondWithPrefix(sprintf(
+                'While waiting for the furnace to finish you see a little chest '
+                	. 'laying on the ground. You picked it up. You can open it '
+            		. 'with !openchest'
+            ));
+            $chest = \Botlife\Entity\Bar\ItemDb::getItem('chest');
+            $user->inventory->incItemAmount($chest);
+        }
         $this->respondWithPrefix(sprintf(
             'You just made ' . $c(3, '%s %s') . $c(12, '! You now have ')
                 . $c(3, '%s %s') . $c(12, '.'),
