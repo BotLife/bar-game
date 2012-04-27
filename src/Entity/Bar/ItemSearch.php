@@ -11,7 +11,7 @@ class ItemSearch extends \Botlife\Entity\SearchEngine
     public $priority = 25;
     public $aliases  = array('bar');
     
-    public function search($searchTerms, $results = 1)
+    public function search($searchTerms, $results = 1, $filters = array())
     {
         $item = ItemDb::getItem($searchTerms);
         if (!$item) {
